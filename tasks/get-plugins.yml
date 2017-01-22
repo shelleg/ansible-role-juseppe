@@ -1,0 +1,15 @@
+---
+
+- name: "Create cache dir"
+  file:
+    name: "{{ juseppe_plugin_cache_dir }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: "Get plugin to local cache dir"
+  get_url:
+    url: "http://mirrors.jenkins-ci.org/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.{{ item.extention | d('hpi') }}"
+    dest: "{{ juseppe_plugin_cache_dir }}"
+  with_items:
+    - "{{ juseppe_plugins }}"
