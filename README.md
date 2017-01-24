@@ -16,6 +16,7 @@ Role Variables
 * `juseppe_container_tag: 1.0.0`
 * `juseppe_container_port: 8080`
 * `juseppe_host_port: 9090`
+* `juseppe_docker_host_ip: localhost`
 
 * `juseppe_cert_dir: /var/lib/juseppe`
 * `juseppe_plugin_cache_dir: /var/cache/juseppe`
