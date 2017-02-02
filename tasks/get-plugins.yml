@@ -1,4 +1,6 @@
 ---
+- name: "Merge lists to form juseppe_plugins"
+  include: "set-plugin-list.yml"
 
 - name: "Create cache dir"
   file:
@@ -7,9 +9,17 @@
     owner: root
     group: root
 
+- set_fact:
+    plugin_url: "{{ cj_nexus_url }}/{{ cj_nexus_mirror }}"
+  when: cj_nexus
+
 - name: "Get plugin to local cache dir"
   get_url:
-    url: "http://mirrors.jenkins-ci.org/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.{{ item.extention | d('hpi') }}"
+    url: "{{ plugin_url |d('http://mirrors.jenkins-ci.org') }}/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.{{ item.extention | d('hpi') }}"
     dest: "{{ juseppe_plugin_cache_dir }}"
   with_items:
     - "{{ juseppe_plugins }}"
+  register: res
+  until: '"OK" in res.msg'
+  retries: 3
+  delay: 3
