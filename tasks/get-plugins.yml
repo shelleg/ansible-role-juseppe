@@ -1,4 +1,8 @@
 ---
+- name: "install wget"
+  package:
+    name: "wget"
+    state: installed
 
 - name: "Create cache dir"
   file:
@@ -8,8 +12,17 @@
     group: root
 
 - name: "Get plugin to local cache dir"
-  get_url:
-    url: "http://mirrors.jenkins-ci.org/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.{{ item.extention | d('hpi') }}"
-    dest: "{{ juseppe_plugin_cache_dir }}"
+  shell: >
+    cd {{ juseppe_plugin_cache_dir }}; \
+    wget http://mirrors.jenkins-ci.org/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.{{ item.extention | d('hpi') }} -O {{ item.name }}.{{ item.extention | d('hpi') }}
+  retries: 3
+  delay: 1
   with_items:
     - "{{ juseppe_plugins }}"
+
+#- name: "Get plugin to local cache dir"
+#  get_url:
+#    url: "http://mirrors.jenkins-ci.org/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.{{ item.extention | d('hpi') }}"
+#    dest: "{{ juseppe_plugin_cache_dir }}"
+#  with_items:
+#    - "{{ juseppe_plugins }}"

@@ -4,6 +4,7 @@
   docker_container:
     name: "{{ juseppe_container_hostname }}"
     image: "{{ juseppe_container_name }}:{{ juseppe_container_tag }}"
+    restart_policy: always
     volumes:
       - "{{ juseppe_plugin_cache_dir }}:/juseppe/plugins/"
       - "{{ juseppe_cert_dir }}/uc.key:/juseppe/cert/uc.key"
